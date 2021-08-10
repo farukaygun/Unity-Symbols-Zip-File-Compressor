@@ -1,34 +1,35 @@
-from genericpath import exists, isfile
 import os
 from zipfile import ZipFile, ZIP_DEFLATED
 from shutil import rmtree
-from os.path import basename
 
-dir_name = './'
-extension = ".zip"
+fileAbsPath = ""
 fileName = ""
 extracted = []
 
 def Unzip():
     print("Unzipping...")
 
-    os.chdir(dir_name) # dosya dosya geziyor.
-    for item in os.listdir(dir_name):
-        if item.endswith(extension):
+    os.chdir('./') # dosya dosya geziyor.
+    for item in os.listdir('./'):
+        if item.endswith('.zip'):
 
+            global fileAbsPath
+            fileAbsPath = os.path.abspath(item)
+            
             global fileName
-            fileName = os.path.abspath(item)
+            fileName = item
+
             zip_ref = ZipFile(fileName)
 
             global extracted
             extracted = zip_ref.namelist() # zipten çıkarılan dosya isimleri
 
-            zip_ref.extractall(dir_name)
+            zip_ref.extractall('./')
             zip_ref.close()
 
 def CreateZipFile():
     print("Creating symbols.zip...")
-    zippedFiles = ZipFile('symbols.zip', 'w', ZIP_DEFLATED)
+    zippedFiles = ZipFile(fileName + '.zip', 'w', ZIP_DEFLATED)
 
     for item in extracted:
         zippedFiles.write(item)
@@ -38,7 +39,7 @@ def CreateZipFile():
 def Clean():
     print("Cleaning...")
 
-    os.remove(fileName)
+    os.remove(fileAbsPath)
     for item in extracted:
         if os.path.isdir(item) or os.path.isfile(item):
             rmtree(item)
