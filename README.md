@@ -11,3 +11,7 @@ You can find Windows executable in "dist" folder.
 or
 
 > **python ./zipper.py**
+
+# Requierements
+
+> pip install console-menu
