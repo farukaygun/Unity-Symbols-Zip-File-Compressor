@@ -29,7 +29,7 @@ def Unzip():
 
 def CreateZipFile():
     print("Creating symbols.zip...")
-    zippedFiles = ZipFile(fileName + '.zip', 'w', ZIP_DEFLATED)
+    zippedFiles = ZipFile(fileName, 'w', ZIP_DEFLATED)
 
     for item in extracted:
         zippedFiles.write(item)
