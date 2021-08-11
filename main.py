@@ -12,7 +12,7 @@ extracted = []
 class Zipper:
 
     @staticmethod
-    def get_zip_files(self):
+    def get_zip_files():
         print("FILES:\n")
 
         os.chdir('./')
@@ -57,7 +57,7 @@ class Zipper:
         self.clean()
 
     @staticmethod
-    def clean(self):
+    def clean():
         global files_abs_path, filenames, extracted
 
         print("Cleaning...")
@@ -75,8 +75,9 @@ class Zipper:
 
 
 def main():
-    Zipper.get_zip_files()
-    Zipper.main_menu(filenames)
+    zipper = Zipper()
+    zipper.get_zip_files()
+    zipper.main_menu(filenames)
 
 
 if __name__ == "__main__":
