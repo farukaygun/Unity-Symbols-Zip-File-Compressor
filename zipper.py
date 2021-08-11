@@ -1,59 +1,77 @@
 import os
 from zipfile import ZipFile, ZIP_DEFLATED
 from shutil import rmtree
+from consolemenu import *
+from consolemenu.items import *
 
-fileAbsPath = ""
-fileName = ""
+filesAbsPath = []
+fileNames = []
 extracted = []
 
-def Unzip():
-    print("Unzipping...")
+def getZipFiles():
+    print("FILES:\n")
 
     os.chdir('./') # dosya dosya geziyor.
     for item in os.listdir('./'):
         if item.endswith('.zip'):
-
+            
             global fileAbsPath
-            fileAbsPath = os.path.abspath(item)
+            filesAbsPath.append(os.path.abspath(item))
             
             global fileName
-            fileName = item
+            fileNames.append(item)
 
-            zip_ref = ZipFile(fileName)
+def mainMenu(fileNameList):
+    menu = ConsoleMenu("FILES")
+    for item in fileNameList:
+        menuItem = FunctionItem(item, unzip, [fileNameList.index(item)])
+        menu.append_item(menuItem)
+    menu.show()
 
-            global extracted
-            extracted = zip_ref.namelist() # zipten çıkarılan dosya isimleri
+def unzip(index):
+    print("Unzipping...")
 
-            zip_ref.extractall('./')
-            zip_ref.close()
+    zip_ref = ZipFile(fileNames[index])
 
-def CreateZipFile():
+    global extracted
+    extracted = zip_ref.namelist() # zipten çıkarılan dosya isimleri
+    zip_ref.extractall('./')
+    zip_ref.close()
+
+    createZipFile(index)
+
+def createZipFile(index):
     print("Creating symbols.zip...")
-    zippedFiles = ZipFile(fileName, 'w', ZIP_DEFLATED)
+    zippedFiles = ZipFile(fileNames[index], 'w', ZIP_DEFLATED)
 
     for item in extracted:
         zippedFiles.write(item)
 
     zippedFiles.close()
 
+    Clean()
+
 def Clean():
+    global filesAbsPath, fileNames, extracted
+
     print("Cleaning...")
 
-    os.remove(fileAbsPath)
+    # os.remove(filesAbsPath[index])
     for item in extracted:
         if os.path.isdir(item) or os.path.isfile(item):
             rmtree(item)
 
+    filesAbsPath = []
+    fileNames = []
+    extracted = []
+
     print("Finished successfully!")
 
-
-def Main():
-    Unzip()
-    CreateZipFile()
-    Clean()
+def main():
+    getZipFiles()
+    mainMenu(fileNames)
 
 if __name__ == "__main__":
-    Main()
-    input("Press Enter to continue...")
+    main()
 
 # pyinstaller.exe --onefile --uac-admin --icon=icon.ico zipper.py      
