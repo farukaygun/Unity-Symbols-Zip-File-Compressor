@@ -4,7 +4,7 @@ It unzipping uncompressed symbols file and creating compressed zip file.
 
 ## Usage
 
-> **Warning:** Run program in same dir with zip file and make sure there is only one zip file.
+> **Warning:** Run program in same dir with zip files.
 
 You can find Windows executable in "dist" folder.
 
